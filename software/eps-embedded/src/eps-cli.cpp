@@ -3,13 +3,24 @@
 #include <SimpleCLI.h>
 
 #include "eps-cli.h"
+#include "eps-parameters.h"
 
 SimpleCLI cli;
 
 // All commands should be declared bellow
 Command helpCommand;
 Command testCommand;
+Command catcfCommand;
+Command rmcfCommand;
+Command reloadcfCommand;
+Command savecfCommand;
+Command restorecfCommand;
+Command rebootCommand;
 
+
+extern void loadParametersFromFile();
+extern void saveParametersToFile();
+extern void restoreEpsConfigFile();
 
 /*
 errorCallback
@@ -31,25 +42,94 @@ void errorCallback(cmd_error* e) {
 
 /*
 helpCommandCallback
-display information about all the supported commands
+* Display information about all the supported commands.
 */
 void helpCommandCallback(cmd* commandPointer) {
-  Command cmd(commandPointer); // Create wrapper class instance for the pointer
-  
-  Serial.println("supported commands :");
-  Serial.println("\"help\" : Show the list of supported commands.");
-  Serial.println("\"test\" : Dummy command used as a template.");
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    Serial.println("_______________________________________________________________________");
+    Serial.println("supported commands :");
+    Serial.println("=======================================================================");
+    Serial.println("\"help\"        : Display information about all the supported commands.");
+    Serial.println("\"test\"        : Dummy command used as a template.");
+    Serial.println("\"catcf\"       : print the whole config file");
+    Serial.println("\"rmcf\"        : delete the whole config file");
+    Serial.println("\"reloadcf\"    : reload the whole config file");
+    Serial.println("\"savecf\"      : save the current config into the config file");
+    Serial.println("\"restorecf\"   : restore the config file to what it was before saving");
+    Serial.println("\"reboot\"      : reboot");
+    Serial.println("_______________________________________________________________________");
+    Serial.println("Remember that backspace is not supported");
+    Serial.println("_______________________________________________________________________");
 }
 
 
 /*
 testCommandCallback
-this is just a template for developing the other commands
+* Dummy command used as a template.
 */
 void testCommandCallback(cmd* commandPointer) {
-  Command cmd(commandPointer); // Create wrapper class instance for the pointer
-  
-  Serial.println("test command sucessfull");
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    Serial.println("test command sucessfull");
+}
+
+
+/*
+catcfCommandCallback
+* print the whole config file.
+*/
+void catcfCommandCallback(cmd* commandPointer) {
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    printEpsConfigFile();
+}
+
+
+/*
+rmcfCommandCallback
+* delete the whole config file.
+*/
+void rmcfCommandCallback(cmd* commandPointer) {
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    deleteEpsConfigFile();
+}
+
+
+/*
+reloadcfCommandCallback
+* reload the whole config file.
+*/
+void reloadcfCommandCallback(cmd* commandPointer) {
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    loadParametersFromFile();
+}
+
+
+/*
+savecfCommandCallback
+* save the current config into the config file.
+*/
+void savecfCommandCallback(cmd* commandPointer) {
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    saveParametersToFile();
+}
+
+
+/*
+restorecfCommandCallback
+* restore the config file to what it was before saving.
+*/
+void restorecfCommandCallback(cmd* commandPointer) {
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    restoreEpsConfigFile();
+}
+
+
+/*
+rebootCommandCallback
+* reboot mcu.
+*/
+void rebootCommandCallback(cmd* commandPointer) {
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    ESP.restart();
 }
 
 
@@ -84,6 +164,13 @@ void setupEpsCli(){
     // 
     helpCommand = cli.addCommand("help", helpCommandCallback);
     testCommand = cli.addCommand("test", testCommandCallback);
+    catcfCommand = cli.addCommand("catcf", catcfCommandCallback);
+    rmcfCommand = cli.addCommand("rmcf", rmcfCommandCallback);
+    reloadcfCommand = cli.addCommand("reloadcf", reloadcfCommandCallback);
+    savecfCommand = cli.addCommand("savecf", savecfCommandCallback);
+    restorecfCommand = cli.addCommand("restorecf", restorecfCommandCallback);
+    rebootCommand = cli.addCommand("reboot", rebootCommandCallback);
+
 }
 
 
@@ -109,6 +196,7 @@ void manageEpsCli(){
             Serial.println("# " + input);   // Display the Command
             cli.parse(input);               // Parse and execute the command
 
+            Serial.println("");
             Serial.printf("> ");    // Command prompt
             input = latestData;     // keep the remaining non parsed data in input
 
