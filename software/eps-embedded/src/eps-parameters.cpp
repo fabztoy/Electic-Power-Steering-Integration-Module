@@ -185,7 +185,7 @@ void saveParametersToFile(){
     doc["P_speedLookupConfig"]["P_speedLookupPt5_Y"] = epsConfig.P_speedLookupConfig.P_speedLookupPt5_Y;
 
     // Serialize JSON to file
-    if (serializeJson(doc, f) == 0) {
+    if (serializeJsonPretty(doc, f) == 0) {
         Serial.println(F("Failed to write to file"));
     }
 
