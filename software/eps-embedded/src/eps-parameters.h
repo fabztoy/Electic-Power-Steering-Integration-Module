@@ -46,5 +46,6 @@ void epsParametersInit();
 
 void printEpsConfigFile();
 void deleteEpsConfigFile();
+void updateEpsParameter(String pname, String pvalue);
 
 #endif /* _EPS_PARAMETERS_H_ */

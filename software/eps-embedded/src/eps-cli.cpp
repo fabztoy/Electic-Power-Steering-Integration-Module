@@ -15,6 +15,7 @@ Command rmcfCommand;
 Command reloadcfCommand;
 Command savecfCommand;
 Command restorecfCommand;
+Command updatepCommand;
 Command rebootCommand;
 
 
@@ -46,20 +47,21 @@ helpCommandCallback
 */
 void helpCommandCallback(cmd* commandPointer) {
     Command cmd(commandPointer); // Create wrapper class instance for the pointer
-    Serial.println("_______________________________________________________________________");
+    Serial.println("_______________________________________________________________________________");
     Serial.println("supported commands :");
-    Serial.println("=======================================================================");
-    Serial.println("\"help\"        : Display information about all the supported commands.");
-    Serial.println("\"test\"        : Dummy command used as a template.");
-    Serial.println("\"catcf\"       : print the whole config file");
-    Serial.println("\"rmcf\"        : delete the whole config file");
-    Serial.println("\"reloadcf\"    : reload the whole config file");
-    Serial.println("\"savecf\"      : save the current config into the config file");
-    Serial.println("\"restorecf\"   : restore the config file to what it was before saving");
-    Serial.println("\"reboot\"      : reboot");
-    Serial.println("_______________________________________________________________________");
+    Serial.println("===============================================================================");
+    Serial.println("help                    : Display information about all the supported commands.");
+    Serial.println("test                    : Dummy command used as a template.");
+    Serial.println("catcf                   : print the whole config file");
+    Serial.println("rmcf                    : delete the whole config file");
+    Serial.println("reloadcf                : reload the whole config file");
+    Serial.println("savecf                  : save the current config into the config file");
+    Serial.println("restorecf               : restore the config file to what it was before saving");
+    Serial.println("updatep PNAME PVALUE    : update the parameter PNAME to PVALUE");
+    Serial.println("reboot                  : reboot");
+    Serial.println("______________________________________________________________________________");
     Serial.println("Remember that backspace is not supported");
-    Serial.println("_______________________________________________________________________");
+    Serial.println("______________________________________________________________________________");
 }
 
 
@@ -124,6 +126,15 @@ void restorecfCommandCallback(cmd* commandPointer) {
 
 
 /*
+updatepCommandCallback
+*/
+void updatepCommandCallback(cmd* commandPointer) {
+    Command cmd(commandPointer); // Create wrapper class instance for the pointer
+    updateEpsParameter(cmd.getArgument("PNAME").getValue(), cmd.getArgument("PVALUE").getValue());
+}
+
+
+/*
 rebootCommandCallback
 * reboot mcu.
 */
@@ -169,6 +180,9 @@ void setupEpsCli(){
     reloadcfCommand = cli.addCommand("reloadcf", reloadcfCommandCallback);
     savecfCommand = cli.addCommand("savecf", savecfCommandCallback);
     restorecfCommand = cli.addCommand("restorecf", restorecfCommandCallback);
+    updatepCommand = cli.addCommand("updatep", updatepCommandCallback);
+        updatepCommand.addPositionalArgument("PNAME");
+        updatepCommand.addPositionalArgument("PVALUE");
     rebootCommand = cli.addCommand("reboot", rebootCommandCallback);
 
 }

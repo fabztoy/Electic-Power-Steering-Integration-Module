@@ -194,6 +194,106 @@ void saveParametersToFile(){
 }
 
 
+void updateUint16Parameter(String pvalue, uint16_t* pparameter){
+    int myInt(pvalue.toInt());
+
+    if (myInt <= static_cast<int>(UINT16_MAX) && myInt >=0) {
+        *pparameter = static_cast<uint16_t>(myInt);
+        Serial.printf("Set to %i\n", *pparameter);
+    }else {
+        Serial.println("Error : could not cast to utint16_t");
+    }
+}
+
+
+void updateUint8Parameter(String pvalue, uint8_t* pparameter){
+    int myInt(pvalue.toInt());
+
+    if (myInt <= static_cast<int>(UINT8_MAX) && myInt >=0) {
+        *pparameter = static_cast<uint8_t>(myInt);
+        Serial.printf("Set to %i\n", *pparameter);
+    }else {
+        Serial.println("Error : could not cast to utint8_t");
+    }
+}
+
+
+void updateFloatParameter(String pvalue, float* pparameter){
+    *pparameter = pvalue.toFloat();
+    Serial.printf("Set to %f\n", *pparameter);
+}
+
+
+/*
+updateEpsParameter
+
+*/
+void updateEpsParameter(String pname, String pvalue){
+
+    if (pname == "P_tyreWidth"){
+        // uint16_t epsConfig.P_tyreConfig.P_tyreWidth
+        updateUint16Parameter(pvalue, &(epsConfig.P_tyreConfig.P_tyreWidth));
+    }else if(pname == "P_tyreAR"){
+        // uint8_t epsConfig.P_tyreConfig.P_tyreAR
+        updateUint8Parameter(pvalue, &(epsConfig.P_tyreConfig.P_tyreAR));
+    }else if(pname == "P_wheelSize_in"){
+        // uint8_t epsConfig.P_tyreConfig.P_wheelSize_in
+        updateUint8Parameter(pvalue, &(epsConfig.P_tyreConfig.P_wheelSize_in));
+    }else if(pname == "P_vssPulsesPerRev"){
+        // uint8_t epsConfig.P_vssPulsesPerRev
+        updateUint8Parameter(pvalue, &(epsConfig.P_vssPulsesPerRev));
+    }else if(pname == "P_diffToVssRatio"){
+        // uint8_t epsConfig.P_diffToVssRatio
+        updateUint8Parameter(pvalue, &(epsConfig.P_diffToVssRatio));
+    }else if(pname == "P_speedometerSpeedConstant"){
+        // float epsConfig.P_speedometerConfig.P_speedometerSpeedConstant
+        updateFloatParameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerSpeedConstant));
+    }else if(pname == "P_speedometerMotorStepsPerRev"){
+        // uint16_t epsConfig.P_speedometerConfig.P_speedometerMotorStepsPerRev;
+        updateUint16Parameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerMotorStepsPerRev));
+    }else if(pname == "P_speedometerMotorCurrentRating"){
+        // uint16_t epsConfig.P_speedometerConfig.P_speedometerMotorCurrentRating;
+        updateUint16Parameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerMotorCurrentRating));
+    }else if(pname == "P_speedometerMotorGearboxRatio"){
+        // uint16_t epsConfig.P_speedometerConfig.P_speedometerMotorGearboxRatio;
+        updateUint16Parameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerMotorGearboxRatio));
+    }else if(pname == "P_speedLookupPt1_X"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt1_X
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt1_X));
+    }else if(pname == "P_speedLookupPt1_Y"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt1_Y
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt1_Y));
+    }else if(pname == "P_speedLookupPt2_X"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt2_X
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt2_X));
+    }else if(pname == "P_speedLookupPt2_Y"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt2_Y
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt2_Y));
+    }else if(pname == "P_speedLookupPt3_X"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt3_X
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt3_X));
+    }else if(pname == "P_speedLookupPt3_Y"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt3_Y
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt3_Y));
+    }else if(pname == "P_speedLookupPt4_X"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt4_X
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt4_X));
+    }else if(pname == "P_speedLookupPt4_Y"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt4_Y
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt4_Y));
+    }else if(pname == "P_speedLookupPt5_X"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt5_X
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt5_X));
+    }else if(pname == "P_speedLookupPt5_Y"){
+        // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt5_Y
+        updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt5_Y));
+    }else{
+        // Unsupported parameter.
+        Serial.printf("%s is not found in \"void updateEpsParameter(\" in \"eps-parameters.cpp\"\n", pname.c_str());
+    }
+
+}
+
 /*
 printEpsConfigFile
 * Print the config file trough Serial prints.
