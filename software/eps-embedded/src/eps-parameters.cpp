@@ -3,7 +3,9 @@
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
 
-#include <eps-parameters.h>
+#include "eps-parameters.h"
+
+#include "speedometer.h"
 
 #define FORMAT_SPIFFS_IF_FAILED true
 
@@ -23,9 +25,7 @@ EpsConfig epsDefaultConfig={
 
     {   // EpsSpeedometerConfig P_speedometerConfig
         10.616, // float P_speedometerSpeedConstant;           // speedometer speed constant in rpm/kph
-        28,     // uint16_t P_speedometerMotorStepsPerRev;     // motor steps per revolution (360/StepAngle)
-        4,      // uint16_t P_speedometerMotorCurrentRating;   // motor current rating in mA
-        100     // uint16_t P_speedometerMotorGearboxRatio;    // motor gear ratio in %
+        250,    // uint16_t P_speedometerMotorKV;              // motor KV (rpm/volt)
     },
     
     {   // EpsSpeedLookupConfig P_speedLookupConfig;
@@ -113,9 +113,7 @@ void loadParametersFromFile(){
     epsConfig.P_diffToVssRatio = doc["P_diffToVssRatio"] | epsDefaultConfig.P_diffToVssRatio;
     
     epsConfig.P_speedometerConfig.P_speedometerSpeedConstant = doc["P_speedometerConfig"]["P_speedometerSpeedConstant"] | epsDefaultConfig.P_speedometerConfig.P_speedometerSpeedConstant;
-    epsConfig.P_speedometerConfig.P_speedometerMotorStepsPerRev = doc["P_speedometerConfig"]["P_speedometerMotorStepsPerRev"] | epsDefaultConfig.P_speedometerConfig.P_speedometerMotorStepsPerRev;
-    epsConfig.P_speedometerConfig.P_speedometerMotorCurrentRating = doc["P_speedometerConfig"]["P_speedometerMotorCurrentRating"] | epsDefaultConfig.P_speedometerConfig.P_speedometerMotorCurrentRating;
-    epsConfig.P_speedometerConfig.P_speedometerMotorGearboxRatio = doc["P_speedometerConfig"]["P_speedometerMotorGearboxRatio"] | epsDefaultConfig.P_speedometerConfig.P_speedometerMotorGearboxRatio;
+    epsConfig.P_speedometerConfig.P_speedometerMotorKV = doc["P_speedometerConfig"]["P_speedometerMotorKV"] | epsDefaultConfig.P_speedometerConfig.P_speedometerMotorKV;
     
     epsConfig.P_speedLookupConfig.P_speedLookupPt1_X = doc["P_speedLookupConfig"]["P_speedLookupPt1_X"]  | epsDefaultConfig.P_speedLookupConfig.P_speedLookupPt1_X;
     epsConfig.P_speedLookupConfig.P_speedLookupPt1_Y = doc["P_speedLookupConfig"]["P_speedLookupPt1_Y"]  | epsDefaultConfig.P_speedLookupConfig.P_speedLookupPt1_Y;
@@ -169,9 +167,7 @@ void saveParametersToFile(){
     doc["P_diffToVssRatio"] = epsConfig.P_diffToVssRatio;
     
     doc["P_speedometerConfig"]["P_speedometerSpeedConstant"] = epsConfig.P_speedometerConfig.P_speedometerSpeedConstant;
-    doc["P_speedometerConfig"]["P_speedometerMotorStepsPerRev"] = epsConfig.P_speedometerConfig.P_speedometerMotorStepsPerRev;
-    doc["P_speedometerConfig"]["P_speedometerMotorCurrentRating"] = epsConfig.P_speedometerConfig.P_speedometerMotorCurrentRating;
-    doc["P_speedometerConfig"]["P_speedometerMotorGearboxRatio"] = epsConfig.P_speedometerConfig.P_speedometerMotorGearboxRatio;
+    doc["P_speedometerConfig"]["P_speedometerMotorKV"] = epsConfig.P_speedometerConfig.P_speedometerMotorKV;
     
     doc["P_speedLookupConfig"]["P_speedLookupPt1_X"] = epsConfig.P_speedLookupConfig.P_speedLookupPt1_X;
     doc["P_speedLookupConfig"]["P_speedLookupPt1_Y"] = epsConfig.P_speedLookupConfig.P_speedLookupPt1_Y;
@@ -249,15 +245,11 @@ void updateEpsParameter(String pname, String pvalue){
     }else if(pname == "P_speedometerSpeedConstant"){
         // float epsConfig.P_speedometerConfig.P_speedometerSpeedConstant
         updateFloatParameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerSpeedConstant));
-    }else if(pname == "P_speedometerMotorStepsPerRev"){
-        // uint16_t epsConfig.P_speedometerConfig.P_speedometerMotorStepsPerRev;
-        updateUint16Parameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerMotorStepsPerRev));
-    }else if(pname == "P_speedometerMotorCurrentRating"){
-        // uint16_t epsConfig.P_speedometerConfig.P_speedometerMotorCurrentRating;
-        updateUint16Parameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerMotorCurrentRating));
-    }else if(pname == "P_speedometerMotorGearboxRatio"){
-        // uint16_t epsConfig.P_speedometerConfig.P_speedometerMotorGearboxRatio;
-        updateUint16Parameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerMotorGearboxRatio));
+        speedometerInit();
+    }else if(pname == "P_speedometerMotorKV"){
+        // uint16_t epsConfig.P_speedometerConfig.P_speedometerMotorKV;
+        updateUint16Parameter(pvalue, &(epsConfig.P_speedometerConfig.P_speedometerMotorKV));
+        speedometerInit();
     }else if(pname == "P_speedLookupPt1_X"){
         // uint8_t epsConfig.P_speedLookupConfig.P_speedLookupPt1_X
         updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt1_X));

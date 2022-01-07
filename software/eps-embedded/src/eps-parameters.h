@@ -13,9 +13,7 @@ struct EpsTyreConfig {
 
 struct EpsSpeedometerConfig {
     float P_speedometerSpeedConstant;           // speedometer speed constant in rpm/kph
-    uint16_t P_speedometerMotorStepsPerRev;     // motor steps per revolution (360/StepAngle)
-    uint16_t P_speedometerMotorCurrentRating;   // motor current rating in mA
-    uint16_t P_speedometerMotorGearboxRatio;    // motor gear ratio in %
+    uint16_t P_speedometerMotorKV;              // motor KV (rpm/volt)
 };
 
 

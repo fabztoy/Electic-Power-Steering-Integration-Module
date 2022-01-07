@@ -3,6 +3,7 @@
 #include "eps-cli.h"
 #include "eps-parameters.h"
 
+#include "speedometer.h"
 
 /*
 
@@ -11,6 +12,9 @@ void setup()
 {
     epsParametersInit();
     setupEpsCli();
+    speedometerInit();
+
+    speedometerUpdate(50); // Set to 50km/h (530.8rpm) just for testing
 }
 
 
