@@ -5,6 +5,8 @@
 #include "eps-cli.h"
 #include "eps-parameters.h"
 
+#include "speedometer.h"
+
 SimpleCLI cli;
 
 // All commands should be declared bellow
@@ -122,6 +124,8 @@ reloadcfCommandCallback
 void reloadcfCommandCallback(cmd* commandPointer) {
     Command cmd(commandPointer); // Create wrapper class instance for the pointer
     loadParametersFromFile();
+
+    speedometerInit();
 }
 
 
