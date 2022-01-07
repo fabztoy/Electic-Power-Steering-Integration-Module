@@ -199,7 +199,7 @@ void updateUint16Parameter(String pvalue, uint16_t* pparameter){
 
     if (myInt <= static_cast<int>(UINT16_MAX) && myInt >=0) {
         *pparameter = static_cast<uint16_t>(myInt);
-        Serial.printf("Set to %i\n", *pparameter);
+        Serial.printf("updated to %i\n", *pparameter);
     }else {
         Serial.println("Error : could not cast to utint16_t");
     }
@@ -211,7 +211,7 @@ void updateUint8Parameter(String pvalue, uint8_t* pparameter){
 
     if (myInt <= static_cast<int>(UINT8_MAX) && myInt >=0) {
         *pparameter = static_cast<uint8_t>(myInt);
-        Serial.printf("Set to %i\n", *pparameter);
+        Serial.printf("updated to %i\n", *pparameter);
     }else {
         Serial.println("Error : could not cast to utint8_t");
     }
@@ -220,7 +220,7 @@ void updateUint8Parameter(String pvalue, uint8_t* pparameter){
 
 void updateFloatParameter(String pvalue, float* pparameter){
     *pparameter = pvalue.toFloat();
-    Serial.printf("Set to %f\n", *pparameter);
+    Serial.printf("updated to %f\n", *pparameter);
 }
 
 
@@ -229,7 +229,8 @@ updateEpsParameter
 
 */
 void updateEpsParameter(String pname, String pvalue){
-
+    bool success = true;
+    Serial.printf("parameter %s ", pname.c_str());
     if (pname == "P_tyreWidth"){
         // uint16_t epsConfig.P_tyreConfig.P_tyreWidth
         updateUint16Parameter(pvalue, &(epsConfig.P_tyreConfig.P_tyreWidth));
@@ -289,9 +290,13 @@ void updateEpsParameter(String pname, String pvalue){
         updateUint8Parameter(pvalue, &(epsConfig.P_speedLookupConfig.P_speedLookupPt5_Y));
     }else{
         // Unsupported parameter.
-        Serial.printf("%s is not found in \"void updateEpsParameter(\" in \"eps-parameters.cpp\"\n", pname.c_str());
+        Serial.printf("is not found in \"void updateEpsParameter(\" in \"eps-parameters.cpp\"\n");
+        success = false;
     }
 
+    if (success){
+        Serial.println("do not forget to usecommand savecf and then reboot to make sure that all parameters are reloaded correctly.");
+    }
 }
 
 /*

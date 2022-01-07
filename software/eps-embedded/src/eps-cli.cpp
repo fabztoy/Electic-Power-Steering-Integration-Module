@@ -23,6 +23,26 @@ extern void loadParametersFromFile();
 extern void saveParametersToFile();
 extern void restoreEpsConfigFile();
 
+
+/*
+
+*/
+void printSplash(){
+    // Draw splash screen
+    // this is generated from https://patorjk.com/software/taag/
+    // https://patorjk.com/software/taag/#p=display&f=Big&t=EPS
+    Serial.println("  ______ _____   _____          _   _ ");
+    Serial.println(" |  ____|  __ \\ / ____|        | | (_)");
+    Serial.println(" | |__  | |__) | (___     ___  | |  _ ");
+    Serial.println(" |  __| |  ___/ \\___ \\   / __| | | | |");
+    Serial.println(" | |____| |     ____) | | (__  | | | |");
+    Serial.println(" |______|_|    |_____/   \\___| |_| |_|");
+    Serial.println("");
+    Serial.println("https://github.com/fabztoy/Electic-Power-Steering-Integration-Module");
+    Serial.println("");
+}
+
+
 /*
 errorCallback
 this callback is called everytime there is an error parsing the cli commands
@@ -150,19 +170,7 @@ this should be called only once in setup() function of the main file to make sur
 */
 void setupEpsCli(){
     Serial.begin(115200);
-
-    // Draw splash screen
-    // this is generated from https://patorjk.com/software/taag/
-    // https://patorjk.com/software/taag/#p=display&f=Big&t=EPS
-    Serial.println("  ______ _____   _____          _   _ ");
-    Serial.println(" |  ____|  __ \\ / ____|        | | (_)");
-    Serial.println(" | |__  | |__) | (___     ___  | |  _ ");
-    Serial.println(" |  __| |  ___/ \\___ \\   / __| | | | |");
-    Serial.println(" | |____| |     ____) | | (__  | | | |");
-    Serial.println(" |______|_|    |_____/   \\___| |_| |_|");
-    Serial.println("");
-    Serial.println("https://github.com/fabztoy/Electic-Power-Steering-Integration-Module");
-    Serial.println("");
+    printSplash();
     Serial.println("type \"help\" for a list of supported commands");
     Serial.println("");
 
