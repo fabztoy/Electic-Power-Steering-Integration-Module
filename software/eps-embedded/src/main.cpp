@@ -12,7 +12,7 @@
 void setup()
 {
     epsParametersInit();
-    setupEpsCli();
+    epsCliInit();
 
     epsCanInit();
     speedometerInit();
@@ -28,7 +28,7 @@ void loop()
 {
     static uint64_t timeStamp = 0;
 
-    manageEpsCli();
+    epsCliManage();
 
     // Manage all inputs
     epsCanRxManage();
