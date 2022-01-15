@@ -172,7 +172,7 @@ void rebootCommandCallback(cmd* commandPointer) {
 setupEpsCli
 this should be called only once in setup() function of the main file to make sure the cli is initialized
 */
-void setupEpsCli(){
+void epsCliInit(){
     Serial.begin(115200);
     printSplash();
     Serial.println("type \"help\" for a list of supported commands");
@@ -204,7 +204,7 @@ void setupEpsCli(){
 manageEpsCli
 this should be called in the loop() function of the main file to make sure all received commands are parsed and executed.
 */
-void manageEpsCli(){
+void epsCliManage(){
     static String input = "";
 
     if (Serial.available()){
