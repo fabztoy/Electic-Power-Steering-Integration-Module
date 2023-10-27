@@ -29,10 +29,20 @@ extern void restoreEpsConfigFile();
 /*
 
 */
+void resetColor(){
+    Serial.printf("\e[37;40m");
+}
+
+
+/*
+
+*/
 void printSplash(){
     // Draw splash screen
     // this is generated from https://patorjk.com/software/taag/
     // https://patorjk.com/software/taag/#p=display&f=Big&t=EPS
+    Serial.printf("\e[34;40m");
+    Serial.println("");
     Serial.println("  ______ _____   _____          _   _ ");
     Serial.println(" |  ____|  __ \\ / ____|        | | (_)");
     Serial.println(" | |__  | |__) | (___     ___  | |  _ ");
@@ -42,6 +52,7 @@ void printSplash(){
     Serial.println("");
     Serial.println("https://github.com/fabztoy/Electic-Power-Steering-Integration-Module");
     Serial.println("");
+    resetColor();
 }
 
 
@@ -82,7 +93,10 @@ void helpCommandCallback(cmd* commandPointer) {
     Serial.println("updatep PNAME PVALUE    : update the parameter PNAME to PVALUE");
     Serial.println("reboot                  : reboot");
     Serial.println("______________________________________________________________________________");
-    Serial.println("Remember that backspace is not supported");
+    Serial.println("");
+    Serial.printf("\e[33;40m");
+    Serial.println("* Remember that backspace is not supported");
+    resetColor();
     Serial.println("______________________________________________________________________________");
 }
 

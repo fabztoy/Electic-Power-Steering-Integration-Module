@@ -51,7 +51,7 @@ static void CAN_isr(void *arg_p);
 static int CAN_write_frame_phy(const CAN_frame_t *p_frame);
 static SemaphoreHandle_t sem_tx_complete;
 
-static void CAN_isr(void *arg_p) {
+static IRAM_ATTR void CAN_isr(void *arg_p) {
 
 	// Interrupt flag buffer
 	__CAN_IRQ_t interrupt;
