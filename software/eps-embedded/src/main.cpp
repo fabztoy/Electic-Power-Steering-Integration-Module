@@ -8,10 +8,16 @@
 #include "eps-speed-sensors.h"
 
 #include "speedometer.h"
+#include "frequencyInput.h"
+
 
 SpeedSensor* vehicleSpeedSensor;
 
 uint8_t ledPin = GPIO_NUM_2;
+
+uint16_t io_freq_vss=0;
+
+TaskHandle_t frequencyInputTaskHandle = NULL;
 
 /*
 
@@ -20,9 +26,9 @@ void setup()
 {
     epsParametersInit();
     epsCliInit();
-    vehicleSpeedSensor = SpeedSensor::GetInstance();
+    //vehicleSpeedSensor = SpeedSensor::GetInstance();
 
-
+    xTaskCreate(frequencyInputTask, "frequencyInputTask", 4096, NULL, 10, &frequencyInputTaskHandle);
     epsCanInit();
 
     // Yaris original Tyre size = 175/65R14
@@ -58,6 +64,7 @@ void loop()
 {
     static uint64_t timeStamp = 0;
     static uint64_t timeStamp_250 = 0;
+    static uint64_t timestamp_10 = 0;
 
     epsCliManage();
 
@@ -66,6 +73,14 @@ void loop()
 
     epsMainLogic();
     
+    if(millis() - timestamp_10 > 10){
+        extern xQueueHandle freq_input_34_value_queue;
+        if (uxQueueMessagesWaiting(freq_input_34_value_queue)){
+            xQueueReceive(freq_input_34_value_queue, &io_freq_vss, portMAX_DELAY);
+        }
+
+    }
+
     if (millis() - timeStamp_250 > 250) {
 
         timeStamp_250 = millis();
@@ -74,10 +89,10 @@ void loop()
         //Serial.println(vehicleSpeedSensor->getCount());
     }
 
-    if (millis() - timeStamp > 1000) {
+    if (millis() - timeStamp > 250) {
 
         timeStamp = millis();
-        //Serial.println(vehicleSpeedSensor->getCount());
+        Serial.println(io_freq_vss);
     }
 
     // Manage all outputs

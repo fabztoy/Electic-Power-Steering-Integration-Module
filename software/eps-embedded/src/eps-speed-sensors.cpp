@@ -71,7 +71,7 @@ SpeedSensor::SpeedSensor(){
     //pinMode(GPIO_NUM_0, INPUT);
 
     // vehicle speed sensor
-    attachInterrupt(GPIO_NUM_0, vss_ISR, FALLING);    
+    attachInterrupt(GPIO_NUM_34, vss_ISR, FALLING);    
     
     // Engine Tachometer
     //attachInterrupt(GPIO_NUM_0, tach_ISR, FALLING);
